@@ -10,8 +10,9 @@
     <div class="clock">
       <div class="clock-face">
         <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
+        <div class="hand minute-hand"></div>
         <div class="hand second-hand"></div>
+        <div class="hand-holder"></div>
       </div>
     </div>
 
@@ -56,19 +57,76 @@
       transform: translateY(-3px); /* account for the height of the clock hands */
     }
 
-    .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
-      position: absolute;
-      top: 50%;
+    .second-hand {
+      width: 3px;
+      height: 50%;
     }
 
-  </style>
+    .minute-hand {
+      width: 6px;
+      height: 50%;
+    }
 
-  <script>
+    .hour-hand {
+      width: 6px;
+      height: 34%;
+      bottom: 50%;  
+    }
 
+    .hand-holder {
+      background: black;
+      border-radius: 50%;
+      position: relative;
+      width: 14px;
+      height: 14px;
+      top: calc(50% - 7px);
+      left: 46.8%;
+      right: 50%;
+    }
 
-  </script>
+    .hand {
+      background: black;
+      position: absolute;
+      right: 50%;
+      transform-origin: bottom;
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+      border-radius: 50%;
+    }
+
+</style>
+
+<script>
+
+  const secondHand = document.querySelector('.second-hand');
+  const minuteHand = document.querySelector('.minute-hand');
+  const hourHand = document.querySelector('.hour-hand');
+  const hands = document.querySelectorAll('.hand');
+
+  function setTime() {
+    const now = new Date();
+
+    const seconds = now.getSeconds();
+    const secondsDegrees = (seconds / 60) * 360;
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+    const minutes = now.getMinutes();
+    const minutesDegrees = ((minutes / 60) * 360) + ((seconds/60)*6);
+    minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+    const hour = now.getHours();
+    const hourDegrees = ((hour / 12) * 360) + ((minutes/60)*30);
+    hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+    if(secondsDegrees === 0) {
+      hands.forEach(hand => hand.style.transition = 'none');
+    } else {
+      hands.forEach(hand => hand.style.transition = '');
+    }
+  }
+
+  setInterval(setTime, 1000)
+
+</script>
 </body>
 </html>
