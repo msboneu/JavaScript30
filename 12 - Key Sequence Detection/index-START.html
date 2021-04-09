@@ -7,6 +7,20 @@
 </head>
 <body>
 <script>
+
+const pressed = [];
+const secretCode = 'maryori';
+
+function getCornified(e) {
+  pressed.push(e.key);
+  pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+  if (pressed.join('').toLowerCase().includes(secretCode)) {
+    cornify_add();
+  }
+}
+
+window.addEventListener('keyup', getCornified)
+
 </script>
 </body>
 </html>
